@@ -1,3 +1,8 @@
+<?php
+include_once '../BackEnd/connect.php';
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,7 +21,7 @@
 </head>
 
 <body>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <!-- custom cursors  -->
     <div class="cursor-1"></div>
     <div class="cursor-2"></div>
@@ -72,7 +77,7 @@
 
     <!-- about section starts  -->
 
-    <section class="about" id="about">
+    <section class="about" id="aboutme">
 
         <h1 class="heading"> about <span> me </span> </h1>
 
@@ -99,8 +104,6 @@
                         <p> <span> country : </span> india </p>
                     </div>
                 </div>
-                <!-- <a href="#" class="btn">download CV</a> -->
-                <button class="btn" id="GetFile">Download</button>
                 <style>
                     .btn {
                         display: inline-block;
@@ -117,31 +120,8 @@
                         letter-spacing: .2rem;
                     }
                 </style>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-                <script>
-                    $('#GetFile').on('click', function() {
-                        $.ajax({
-                            url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/172905/test.pdf',
-                            method: 'GET',
-                            xhrFields: {
-                                responseType: 'blob'
-                            },
-                            success: function(data) {
-                                var a = document.createElement('a');
-                                var url = window.URL.createObjectURL(data);
-                                a.href = url;
-                                a.download = 'myfile.pdf';
-                                document.body.append(a);
-                                a.click();
-                                a.remove();
-                                window.URL.revokeObjectURL(url);
-                            }
-                        });
-                    });
-                </script>
 
-                </script>
-                <a href="#" class="btn">hire me</a>
+                <a href="#contact" class="btn">hire me</a>
             </div>
 
         </div>
@@ -320,9 +300,6 @@
                 <img src="../images/img-1.jpg" alt="">
                 <h3> project 01 </h3>
                 <div class="icons">
-                    <a href="infotaking.php" class="fas fa-link"></a>
-                    <a href="#" class="fas fa-share"></a>
-                    <a href="#" class="fas fa-search"></a>
                     <a href="../Template1/template1.php" class="fas fa-link"></a>
                 </div>
             </div>
@@ -331,9 +308,6 @@
                 <img src="../images/img-2.jpg" alt="">
                 <h3> project 02 </h3>
                 <div class="icons">
-                    <a href="#" class="fas fa-link"></a>
-                    <a href="#" class="fas fa-share"></a>
-                    <a href="#" class="fas fa-search"></a>
                     <a href="../Template2/template2.php" class="fas fa-link"></a>
                 </div>
             </div>
@@ -342,9 +316,6 @@
                 <img src="../images/img-3.jpg" alt="">
                 <h3> project 03 </h3>
                 <div class="icons">
-                    <a href="#" class="fas fa-link"></a>
-                    <a href="#" class="fas fa-share"></a>
-                    <a href="#" class="fas fa-search"></a>
                     <a href="../Template3/template3.php" class="fas fa-link"></a>
                 </div>
             </div>
@@ -353,9 +324,6 @@
                 <img src="../images/img-4.jpg" alt="">
                 <h3> project 04 </h3>
                 <div class="icons">
-                    <a href="#" class="fas fa-link"></a>
-                    <a href="#" class="fas fa-share"></a>
-                    <a href="#" class="fas fa-search"></a>
                     <a href="../Template4/template4.php" class="fas fa-link"></a>
                 </div>
             </div>
@@ -364,9 +332,6 @@
                 <img src="../images/img-5.jpg" alt="">
                 <h3> project 05 </h3>
                 <div class="icons">
-                    <a href="#" class="fas fa-link"></a>
-                    <a href="#" class="fas fa-share"></a>
-                    <a href="#" class="fas fa-search"></a>
                     <a href="../Template5/template5.php" class="fas fa-link"></a>
                 </div>
             </div>
@@ -375,9 +340,6 @@
                 <img src="../images/img-6.jpg" alt="">
                 <h3> project 06 </h3>
                 <div class="icons">
-                    <a href="#" class="fas fa-link"></a>
-                    <a href="#" class="fas fa-share"></a>
-                    <a href="#" class="fas fa-search"></a>
                     <a href="../Template6/template6.php" class="fas fa-link"></a>
                 </div>
             </div>
@@ -413,14 +375,14 @@
             <div class="icons">
                 <i class="fas fa-map-marker-alt"></i>
                 <h3>my address</h3>
-                <p>ajis class, Basvangudi, bengaluru, india - 560004</p>
+                <p>Basvangudi, bengaluru, india - 560004</p>
             </div>
 
         </div>
 
         <div class="row">
 
-            <form action="">
+            <form id="imageForm" action="submit.php" method="post" enctype="multipart/form-data">
                 <select name="template" id="template-select" class="box" required>
                     <option value="">Select a template</option>
                     <option value="template1">Template 1</option>
@@ -430,12 +392,13 @@
                     <option value="template5">Template 5</option>
                     <option value="template6">Template 6</option>
                 </select>
-                <input type="text" placeholder="name" class="box" required>
-                <textarea type="email" placeholder="about" class="box" required></textarea>
+                <input id="name" type="text" name="name" placeholder="name" class="box" required>
+                <textarea id="about" name="about" placeholder="about" class="box" required></textarea>
                 <div class="box">
-                    <label for="image-input">Upload Your Image (JPG)       </label>
-                    <input type="file" id="image-input" accept=".jpg" required>
+                    <label for="image-input">Upload Your Image (JPG) </label>
+                    <input id="image-input" type="file" name="image" accept=".jpg" required>
                 </div>
+                <button type="button" class="btn" id="submit_request" onclick="submitForm(event)">Submit</button>
             </form>
 
             <iframe class="map" src="https://maps.google.com/maps?q=bmscee&t=&z=13&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
@@ -447,25 +410,58 @@
 
     <!-- contact section ends -->
 
+    <script>
+        submitForm = (event) => {
+            let template = document.getElementById('template-select').value;
+            if (template === '') {
+                alert('Please select a template');
+                return;
+            }
 
-    <!-- custom js file link  -->
-    <script src="js/script.js"></script>
-    <!-- <script src="https://smtpjs.com/v3/smtp.js"></script>
-  <script>
-    function sendEmail(){
-                    Email.send({
-                Host : "smtp.gmail.com",
-                Username : "unknownhunter06@gmail.com",
-                Password : "prasanna",
-                To : 'prasanna.cs21@bmsce.ac.in',
-                From : document.getElementById("email").value,
-                Subject : "feedback form",
-                Body : "query"
-            }).then(
-            message => alert(message)
-            );
-    }
-        </script>  -->
+            let name = document.getElementById('name').value;
+            let about = document.getElementById('about').value;
+            let imageInput = document.getElementById('image-input');
+
+            // Check if a file is selected
+            if (imageInput.files.length === 0) {
+                alert('Please select an image');
+                return;
+            }
+
+            // Read the selected image as base64
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                let imageBase64 = event.target.result;
+
+                // Prepare the data to be sent via AJAX
+                let formData = new FormData();
+                formData.append('template', template);
+                formData.append('name', name);
+                formData.append('about', about);
+                formData.append('imageBase64', imageBase64);
+
+                // Create an XMLHttpRequest to send the data
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', '../BackEnd/feedback_backend.php', true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Handle the response from the server
+                            let response = JSON.parse(xhr.responseText);
+                            // You can perform further actions based on the response if needed.
+                        } else {
+                            // Handle errors
+                            alert('Request Failed')
+                        }
+                    }
+                };
+                xhr.send(formData);
+            };
+
+            // Read the selected image as Data URL
+            reader.readAsDataURL(imageInput.files[0]);
+        };
+    </script>
 </body>
 
 </html>
