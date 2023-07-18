@@ -1,3 +1,35 @@
+<?php
+include_once '../BackEnd/connect.php';
+session_start();
+$email = $_SESSION['email'];
+$template = $_SESSION['$template'];
+$name='';
+$about='';
+$image='';
+
+if ($template == "template3") {
+    $select_query = "SELECT * FROM user_requests WHERE email = ?";
+    $stmt = mysqli_prepare($con, $select_query);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+
+    $result_query = mysqli_stmt_get_result($stmt);
+} else {
+    $templateValue = "default3"; 
+    $select_query = "SELECT * FROM user_requests WHERE template = ?";
+    $stmt = mysqli_prepare($con, $select_query);
+    mysqli_stmt_bind_param($stmt, "s", $templateValue);
+    mysqli_stmt_execute($stmt);
+
+    $result_query = mysqli_stmt_get_result($stmt);
+}
+
+while ($row = mysqli_fetch_assoc($result_query)) {
+    $name = $row['name'];
+    $about = $row['about'];
+    $image = $row['image'];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,7 +88,7 @@
     
         <!-- Name & Description -->
         <div class="hero-content">
-            <h1>I am John Smith</h1>
+            <h1>I am <?php echo $name?></h1>
             <p class="hero-job"><span>I'M A CREATIVE WEB DEVELOPER</span></p>
             <p class="hero-job-desc">I STAND ON A SWEET SPOT WHERE DESIGN &amp; CODE INTERSECTS. </p>
 
@@ -83,7 +115,7 @@
                     
                     <!-- Name -->
                     <div class="page-scroll site-logo">
-                        <a href="#top">John</a>
+                        <a href="#top"><?php echo $name?></a>
                     </div>
 
                 </div><!-- /.navbar-header -->
@@ -134,7 +166,7 @@
 					</div>
 					<div class="col-sm-4">
 						<div class="big-rectangle">
-							<img src="assets/img/john-logo.png" alt="">
+                            <img src="data:image/png;base64,<?php echo base64_encode($image); ?>">
 						</div><!-- /.big-rectangle -->
 					</div>
 					<div class="col-sm-4">
@@ -169,7 +201,7 @@
         <!-- About section -->
         <section class="site-section section-about text-center" id="about">
             <div class="container">
-                <h2>ABOUT John WORK</h2>
+                <h2>ABOUT <?php echo $name?> WORK</h2>
                 <p class="section-subtitle"><span>Our goal is to build products and services</span></p>
                 <div class="row">
                     <div class="col-sm-3 col-xs-6">
@@ -597,16 +629,6 @@
         </section><!-- /.section-works -->
         <!-- End Works section --> 
 
-        <!-- Me section --> 
-        <section class="section-background section-me background-overlay text-center">
-            <div class="container page-scroll">
-                <h2>Are You Impressed By My Work?</h2>
-                <p>Durabitur commodo ras non urna mauris mollis auctor proin laoreet</p>
-                <a href="#contact" class="btn">GET IN TOUCH</a>
-            </div>
-        </section><!-- /.section-me -->
-        <!-- End Me section --> 
-
         <!-- Clients section --> 
         <section class="section-clients">
             <div class="container">
@@ -644,19 +666,6 @@
             </div>
         </section><!-- /.section-clients -->
         <!-- End Clients section --> 
-
-        <!-- Twitter section --> 
-        <section class="section-background section-twitter background-overlay text-center">
-            <div class="container">
-                <div class="rectangle">
-                    <i class="fa fa-twitter"></i>
-                </div>
-                <p>Latest from Twtter</p>
-                <p>So here’s how you can integrate sign up and sign in for your web and iOS apps, with AWS Cognito.</p>
-                <a href="#" class="btn btn-inverted">follow me</a>
-            </div>
-        </section><!-- /.section-twitter-->
-        <!-- End Twitter section --> 
         
         <!-- Social Networks section --> 
         <section class="section-networks blue-bg">
@@ -708,7 +717,7 @@
         </div>
 
         <div class="container text-center">
-            <p class="copyright">&copy; <a href="http://pixelperfect.mk/" target="_blank">PixelPerfect</a> - 2017</p>
+            <p class="copyright">&copy; <a href="http://pixelperfect.mk/" target="_blank"><?php echo $name?></a> - 2023</p>
         </div>
 
     </footer><!-- /#footer -->

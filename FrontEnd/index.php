@@ -1,6 +1,7 @@
 <?php
 include_once '../BackEnd/connect.php';
 session_start();
+$_SESSION['email'] = 'abc@gmail.com';
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +43,7 @@ session_start();
             <a href="#experience">experience</a>
             <a href="#portfolio">portfolio</a>
             <a href="#contact">contact</a>
+            <a href="">Logout</a>
         </nav>
 
         <div class="follow">
@@ -64,7 +66,7 @@ session_start();
             <h3> i am <span> Prajwal </span> </h3>
             <p class="info"> i am a front-end developer </p>
             <p class="text"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias quidem excepturi natus iste ut. Alias, quod? Earum pariatur obcaecati dolorum! </p>
-            <a href="#about" class="btn">about me</a>
+            <a href="#aboutme" class="btn">about me</a>
         </div>
 
         <div class="image">
@@ -446,10 +448,21 @@ session_start();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            // Handle the response from the server
-                            let response = JSON.parse(xhr.responseText);
-                            // You can perform further actions based on the response if needed.
-                        } else {
+                            // let xhr = new XMLHttpRequest();
+                            // xhr.open('POST', '../BackEnd/update_session.php', true);
+                            // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                            // xhr.onreadystatechange = function() {
+                            //     if (xhr.readyState === XMLHttpRequest.DONE) {
+                            //         if (xhr.status === 200) {
+                            //             // Handle the response from the server if needed
+                            //         } else {
+                            //             // Handle errors
+                            //             alert('Request Failed');
+                            //         }
+                            //     }
+                            // };
+                            // xhr.send('template_variable =' + encodeURIComponent(template));
+``                        } else {
                             // Handle errors
                             alert('Request Failed')
                         }
