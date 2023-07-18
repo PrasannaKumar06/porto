@@ -1,7 +1,6 @@
 <?php
 include_once '../BackEnd/connect.php';
 session_start();
-$_SESSION['email'] = 'abc@gmail.com';
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +42,7 @@ $_SESSION['email'] = 'abc@gmail.com';
             <a href="#experience">experience</a>
             <a href="#portfolio">portfolio</a>
             <a href="#contact">contact</a>
-            <a href="">Logout</a>
+            <a href="" onclick="logout_handle()">Logout</a>
         </nav>
 
         <div class="follow">
@@ -447,22 +446,7 @@ $_SESSION['email'] = 'abc@gmail.com';
                 xhr.open('POST', '../BackEnd/feedback_backend.php', true);
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // let xhr = new XMLHttpRequest();
-                            // xhr.open('POST', '../BackEnd/update_session.php', true);
-                            // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                            // xhr.onreadystatechange = function() {
-                            //     if (xhr.readyState === XMLHttpRequest.DONE) {
-                            //         if (xhr.status === 200) {
-                            //             // Handle the response from the server if needed
-                            //         } else {
-                            //             // Handle errors
-                            //             alert('Request Failed');
-                            //         }
-                            //     }
-                            // };
-                            // xhr.send('template_variable =' + encodeURIComponent(template));
-                        } else {
+                        if (xhr.status === 200) {} else {
                             // Handle errors
                             alert('Request Failed')
                         }
@@ -474,6 +458,17 @@ $_SESSION['email'] = 'abc@gmail.com';
             // Read the selected image as Data URL
             reader.readAsDataURL(imageInput.files[0]);
         };
+
+        logout_handle = () => {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "../BackEnd/backend_signout.php");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    window.location.href = "login.php";
+                }
+            };
+            xhr.send();
+        }
     </script>
 </body>
 
