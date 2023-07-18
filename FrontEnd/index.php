@@ -446,8 +446,14 @@ session_start();
                 xhr.open('POST', '../BackEnd/feedback_backend.php', true);
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {} else {
-                            // Handle errors
+                        if (xhr.status === 200) {
+                            document.getElementById('name').value = '';
+                            document.getElementById('about').value = '';
+                            document.getElementById('template-select').selectedIndex = 0;
+                            imageInput.value = '';
+                            window.location.href = "loadAnim.php";
+                        } 
+                        else {
                             alert('Request Failed')
                         }
                     }
