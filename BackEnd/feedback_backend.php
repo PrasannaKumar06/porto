@@ -5,6 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the form data
     $email = $_SESSION['email'];
     $template = $_POST['template'];
+    $_SESSION['$template'] = $template;
     $name = $_POST['name'];
     $about = $_POST['about'];
     $imageBase64 = $_POST['imageBase64'];

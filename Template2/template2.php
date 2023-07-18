@@ -1,3 +1,34 @@
+<?php
+include_once '../BackEnd/connect.php';
+session_start();
+$email = $_SESSION['email'];
+$template = $_SESSION['$template'];
+$name='';
+$about='';
+$image='';
+
+if ($template == "template2") {
+    $select_query = "SELECT * FROM user_requests WHERE email = ?";
+    $stmt = mysqli_prepare($con, $select_query);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+
+    $result_query = mysqli_stmt_get_result($stmt);
+} else {
+    $templateValue = "default2"; 
+    $select_query = "SELECT * FROM user_requests WHERE template = ?";
+    $stmt = mysqli_prepare($con, $select_query);
+    mysqli_stmt_bind_param($stmt, "s", $templateValue);
+    mysqli_stmt_execute($stmt);
+
+    $result_query = mysqli_stmt_get_result($stmt);
+}
+
+while ($row = mysqli_fetch_assoc($result_query)) {
+    $name = $row['name'];
+    $about = $row['about'];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +51,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark menu shadow fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#">
-        <img src="images/logo.png" alt="logo image">
+        <?php echo $name?>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -46,10 +77,9 @@
         <!-- START THE CONTENT FOR THE INTRO  -->
         <div class="col-md-6 intros text-start">
           <h1 class="display-2">
-            <span class="display-2--intro">Hey!, I'm Patrick</span>
+            <span class="display-2--intro">Hey!, I'm <?php echo $name?></span><br>
             <span class="display-2--description lh-base">
-              this is a multi-purpose responsive layout created with bootstrap v5.
-              (here your can place your description text)
+            <?php echo $about?>
             </span>
           </h1>
         </div>
@@ -518,7 +548,7 @@
         <div class="row text-center text-white">
           <div class="col-12">
             <div class="footer-bottom__copyright">
-              &COPY; Copyright 2021 <a href="#">Company</a> | Created by <a href="http://codewithpatrick.com" target="_blank">Muriungi</a>
+              &COPY; Copyright 2021 <a href="#">Company</a> | Created by <a href="http://codewithpatrick.com" target="_blank"><?php echo $name?></a>
             </div>
           </div>
         </div>
@@ -553,7 +583,7 @@
 
     navbarLinks.forEach(link => {
       link.addEventListener('click', (event) => {
-        event.preventDefault(); 
+        event.preventDefault();
 
         const targetSectionID = link.getAttribute('href');
 

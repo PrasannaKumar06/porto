@@ -1,3 +1,35 @@
+<?php
+include_once '../BackEnd/connect.php';
+session_start();
+$email = $_SESSION['email'];
+$template = $_SESSION['$template'];
+$name='';
+$about='';
+$image='';
+
+if ($template == "template5") {
+    $select_query = "SELECT * FROM user_requests WHERE email = ?";
+    $stmt = mysqli_prepare($con, $select_query);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+
+    $result_query = mysqli_stmt_get_result($stmt);
+} else {
+    $templateValue = "default5"; 
+    $select_query = "SELECT * FROM user_requests WHERE template = ?";
+    $stmt = mysqli_prepare($con, $select_query);
+    mysqli_stmt_bind_param($stmt, "s", $templateValue);
+    mysqli_stmt_execute($stmt);
+
+    $result_query = mysqli_stmt_get_result($stmt);
+}
+
+while ($row = mysqli_fetch_assoc($result_query)) {
+    $name = $row['name'];
+    $about = $row['about'];
+    $image = $row['image'];
+}
+?>
 <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -19,7 +51,7 @@
         <!--==================== HEADER ====================-->
         <header class="header" id="header">
             <nav class="nav container">
-                <a href="#" class="nav__logo">Prashanna Sathiyamoorthy</a>
+                <a href="#" class="nav__logo"><?php echo $name?></a>
                 <div class="nav__menu" id="nav-menu">
                     <ul class="nav__list grid">
                         <li class="nav__item">
@@ -65,25 +97,12 @@
                     <div class="home__content grid">
 
                         <div class="home__img">
-                            <svg class="home__blob" viewBox="0 0 200 187" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <mask id="mask0" mask-type="alpha">
-                                    <path d="M190.312 36.4879C206.582 62.1187 201.309 102.826 182.328 134.186C163.346 165.547 
-                                    130.807 187.559 100.226 186.353C69.6454 185.297 41.0228 161.023 21.7403 129.362C2.45775 
-                                    97.8511 -7.48481 59.1033 6.67581 34.5279C20.9871 10.1032 59.7028 -0.149132 97.9666 
-                                    0.00163737C136.23 0.303176 174.193 10.857 190.312 36.4879Z"/>
-                                </mask>
-                                <g mask="url(#mask0)">
-                                    <path d="M190.312 36.4879C206.582 62.1187 201.309 102.826 182.328 134.186C163.346 
-                                    165.547 130.807 187.559 100.226 186.353C69.6454 185.297 41.0228 161.023 21.7403 
-                                    129.362C2.45775 97.8511 -7.48481 59.1033 6.67581 34.5279C20.9871 10.1032 59.7028 
-                                    -0.149132 97.9666 0.00163737C136.23 0.303176 174.193 10.857 190.312 36.4879Z"/>
-                                    <image class="home__blob-img" x="" xlink:href="packages/images/pras-1.jpeg"/>
-                                </g>
-                            </svg>
+                        <img src="data:image/png;base64,<?php echo base64_encode($image); ?>" class="home__blob-img">
                         </div>
 
                         <div class="home__data">
-                            <h1 class="home__title">Hi, I'am Prashanna</h1>
+                            <h1 class="home__title">Hi, I'am <?php echo $name?></h1>
+                            <p><?php echo $about?></p>
                         </div>
                     </div>
                 </div>
@@ -317,7 +336,7 @@
         <div class="footer__bg">
             <div class="footer__container container grid">
                 <div>
-                    <h1 class="footer__title">Prashanna Sathiyamoorthy</h1>
+                    <h1 class="footer__title"><?php echo $name?></h1>
                 </div>
 
                 <ul class="footer__links">
@@ -341,7 +360,7 @@
                     </a>
                 </div>
             </div>
-            <p class="footer__copy">&#169; Ratheshan03. All rights reserved.</p>
+            <p class="footer__copy">&#169; <?php echo $name?>. All rights reserved.</p>
         </div>
     </footer>
 
