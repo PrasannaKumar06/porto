@@ -400,7 +400,7 @@ $_SESSION['email'] = 'abc@gmail.com';
                     <label for="image-input">Upload Your Image (JPG) </label>
                     <input id="image-input" type="file" name="image" accept=".jpg" required>
                 </div>
-                <a href="../loadAnim.html"><button type="button" class="btn" id="submit_request" onclick="submitForm(event)">Submit</button></a>
+                <button type="button" class="btn" id="submit_request" onclick="submitForm(event)">Submit</button>
             </form>
 
             <iframe class="map" src="https://maps.google.com/maps?q=bmscee&t=&z=13&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
