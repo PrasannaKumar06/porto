@@ -1,0 +1,32 @@
+# Use an official PHP and Apache base image
+FROM php:7.4-apache
+
+# Set the working directory
+WORKDIR /var/www/html
+
+# Copy your PHP application files into the container from the root directory
+COPY . .
+
+# Install PHP extensions and MySQL client
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+# Update package repositories and install MySQL client
+RUN apt-get update && apt-get install -y default-mysql-client
+
+# Copy and configure your MySQL client configuration (my.cnf) if needed
+# Example:
+# COPY ./mysql-config/my.cnf /etc/mysql/my.cnf
+
+# Configure Apache (if needed)
+# For example, you can enable mod_rewrite:
+# RUN a2enmod rewrite
+
+# Copy and configure your virtual host file
+COPY ./apache-config/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+# Expose port 80 (assuming your Apache server listens on port 80)
+EXPOSE 80
+
+# Start Apache web server and your PHP application (replace with actual startup command)
+# Example:
+CMD ["apache2-foreground"]
