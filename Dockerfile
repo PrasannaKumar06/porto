@@ -1,20 +1,42 @@
-# Use an official PHP and Apache base image
-FROM php:7.4-apache
 
-# Set the working directory
+# Use an official PHP runtime as a parent image
+FROM php:7.4-apache
+RUN docker-php-ext-install mysqli
+
+
+# Set the working directory in the container
 WORKDIR /var/www/html
 
-# Copy your PHP application files into the container from the root directory
-COPY . .
+# Copy your application code to the container
+COPY . /var/www/html
 
-# Install PHP extensions (if needed)
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-# Install and configure Apache (if needed)
-# RUN a2enmod rewrite
-
-# Expose port 80
+# Expose the port your web server runs on
 EXPOSE 80
 
-# Start Apache and your PHP application (replace with actual startup command)
+# Define any environment variables if needed
+ENV MYSQL_HOST=localhost:3306
+ENV MYSQL_USER="root"
+ENV MYSQL_PASSWORD="root"
+ENV MYSQL_DATABASE="porfolio"
+
+# Start the Apache web server
 CMD ["apache2-foreground"]
+
+# Use an official PHP runtime as a parent image
+
+# Use an official PHP runtime as the base image
+
+FROM php:7.4-apache
+
+# Set the working directory inside the container
+WORKDIR /var/www/html
+
+# Copy your PHP application code into the container
+COPY . .
+
+# Expose the port for Apache
+EXPOSE 80
+
+# Start the Apache web server
+CMD ["apache2-foreground"]
+
