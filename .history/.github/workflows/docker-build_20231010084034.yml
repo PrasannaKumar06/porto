@@ -36,4 +36,9 @@ jobs:
           docker tag phpmyadmin/phpmyadmin:4.8 prasannakumarr06/portoimage:phpmyadmin-4.8
           docker push prasannakumarr06/portoimage:phpmyadmin-4.8
 
-
+      - name: Deploy with Docker Compose
+        run: |
+          sed -i "s/image: lightgaia\/biblion:web-1.0/image: lightgaia\/biblion:web-1.0/" docker-compose.yml
+          sed -i "s/image: mysql:8.0.16/image: lightgaia\/biblion:mysql-8.0.16/" docker-compose.yml
+          sed -i "s/image: phpmyadmin\/phpmyadmin:4.8/image: lightgaia\/biblion:phpmyadmin-4.8/" docker-compose.yml
+          docker-compose up -d
