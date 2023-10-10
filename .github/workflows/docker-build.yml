@@ -6,17 +6,39 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and Tag Custom Container
         run: |
-          docker build -t prasannakumarr06/portoimage:latest .
-          docker push prasannakumarr06/portoimage:latest
+          docker build -t prasannakumarr06/portoimage:web-1.0 -f Dockerfile .
+
+      - name: Push Custom Container
+        run: |
+          docker push prasannakumarr06/portoimage:web-1.0
+
+      - name: Tag and Push MySQL Container
+        run: |
+          docker pull mysql:8.0.16
+          docker tag mysql:8.0.16 prasannakumarr06/portoimage:mysql-8.0.16
+          docker push prasannakumarr06/portoimage:mysql-8.0.16
+
+      - name: Tag and Push PHPMyAdmin Container
+        run: |
+          docker pull phpmyadmin/phpmyadmin:4.8
+          docker tag phpmyadmin/phpmyadmin:4.8 prasannakumarr06/portoimage:phpmyadmin-4.8
+          docker push prasannakumarr06/portoimage:phpmyadmin-4.8
+
+      - name: Deploy with Docker Compose
+        run: |
+          sed -i "s/image: lightgaia\/biblion:web-1.0/image: lightgaia\/biblion:web-1.0/" docker-compose.yml
+          sed -i "s/image: mysql:8.0.16/image: lightgaia\/biblion:mysql-8.0.16/" docker-compose.yml
+          sed -i "s/image: phpmyadmin\/phpmyadmin:4.8/image: lightgaia\/biblion:phpmyadmin-4.8/" docker-compose.yml
+          docker-compose up -d
